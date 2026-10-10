@@ -1,0 +1,36 @@
+<VirtualHost *:80>
+    ServerName cerpcompvision.com
+    ServerAlias www.cerpcompvision.com
+    DocumentRoot /home/cerp-app/cerpproject-vue-main
+
+
+    # Redirect all HTTP traffic to HTTPS
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    ErrorLog ${APACHE_LOG_DIR}/cerpcompvision_error.log
+    CustomLog ${APACHE_LOG_DIR}/cerpcompvision_access.log combined
+</VirtualHost>
+
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+    ServerName cerpcompvision.com
+    ServerAlias www.cerpcompvision.com
+    DocumentRoot /home/cerp-app/cerpproject-vue-main
+
+
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/cerpcompvision.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/cerpcompvision.com/privkey.pem
+
+    <Directory /var/www/html>
+        Options +Indexes 
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/cerpcompvision_ssl_error.log
+    CustomLog ${APACHE_LOG_DIR}/cerpcompvision_ssl_access.log combined
+</VirtualHost>
+</IfModule>
